@@ -1,4 +1,10 @@
-require("dotenv").config({ path: "./.env.local" });
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config({ path: "./.env.local" });
+  console.log("in dev mode");
+} else {
+  require("dotenv").config();
+}
+
 const TelegramBot = require("node-telegram-bot-api");
 const connectDB = require("./db");
 const {
