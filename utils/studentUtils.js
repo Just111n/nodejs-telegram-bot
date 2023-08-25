@@ -1,3 +1,5 @@
+const COMMAND_PREFIX = "/";
+
 exports.studentDdFromText = function (text) {
   const textLs = text.split("\n");
   const result = {};
@@ -28,11 +30,19 @@ exports.textFromStudentDd = function (studentDd) {
 
 exports.getOutputFromStudent = function (student) {
   const { studentId, name } = student;
-  
+
   const result = `${studentId} ${name}`;
   for (let key in student) {
   }
   return result;
+};
+
+exports.getStudentsMessage = (students) => {
+  return students.map(exports.getOutputFromStudent).join("\n");
+};
+
+exports.isCommandMessage = (text) => {
+  return text.startsWith(COMMAND_PREFIX);
 };
 
 // Check if this module is the main module being executed

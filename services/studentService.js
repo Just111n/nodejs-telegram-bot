@@ -1,7 +1,7 @@
 const Student = require("../models/student");
 const { getOutputFromStudent } = require("../utils/studentUtils");
 
-exports.getNameFromStudentId = async (studentId) => {
+exports.getOutputFromStudentId = async (studentId) => {
   try {
     const student = await Student.findOne({
       studentId: parseInt(studentId, 10),
@@ -13,13 +13,14 @@ exports.getNameFromStudentId = async (studentId) => {
       return "Student not Found";
     }
   } catch (err) {
-    return null;
+    console.error("Error fetching students by student id:", error);
+    throw error;
   }
 };
 
 // Assuming you have a Student model defined somewhere like this:
 
-module.exports.findStudentsByName = async (inputName) => {
+module.exports.getStudentsByName = async (inputName) => {
   try {
     // Case-insensitive search using $regex
     const students = await Student.find({
