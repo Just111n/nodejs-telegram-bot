@@ -1,11 +1,7 @@
-if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config({ path: "./.env.local" });
-  console.log("in dev mode");
-} else {
-  require("dotenv").config();
-}
-
+require("dotenv").config();
 const TelegramBot = require("node-telegram-bot-api");
+const express = require("express");
+const bodyParser = require("body-parser");
 const connectDB = require("./db");
 const {
   handleStartCommand,
@@ -17,6 +13,12 @@ const { handleInlineQuery } = require("./controller/inlineQueryHandlers");
 
 // Constants
 const BOT_TOKEN = process.env.BOT_TOKEN;
+const PORT = process.env.PORT || 5000;
+
+// const app = express();
+
+// Middleware to parse the updates received from Telegram
+// app.use(bodyParser.json());
 
 // Initialize bot and connect to database
 function initializeBot() {
@@ -47,3 +49,13 @@ process.on("unhandledRejection", (error) => {
 
 // Start the bot
 initializeBot();
+
+// app.get(`/`, (req, res) => {
+  
+//   res.send("hello world");
+// });
+
+// // Start the Express server
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}`);
+// });

@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const remoteDB = `mongodb+srv://${process.env.MONGO_ATLAS_USERNAME}:${process.env.MONGO_ATLAS_PASSWORD}@cluster0.ekr2imi.mongodb.net/${process.env.DBNAME}`;
 
 const connectDB = () => {
   try {

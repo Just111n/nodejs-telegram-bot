@@ -4,6 +4,8 @@ const {
   getStudentsMessage,
 } = require("../utils/studentUtils");
 
+const NO_STUDENTS_MESSAGE = "No students found with that name"
+
 module.exports.handleStartCommand = (bot) => (msg) => {
   const chatId = msg.chat.id;
   bot.sendMessage(chatId, "I'm a bot, please talk to me!\nType a name to find their student id");
