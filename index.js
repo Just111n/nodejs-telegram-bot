@@ -22,18 +22,15 @@ const app = express();
 app.use(bodyParser.json());
 
 const bot = new TelegramBot(BOT_TOKEN); // This configures bot to use webhook
-bot.setWebHook(WEBHOOK_URL);
 
 connectDB();
 
-function registerBotEvents() {
-  bot.onText(/\/start/, handleStartCommand(bot));
-  bot.onText(/\/id (.+)/, handleIdCommand(bot));
-  bot.on("message", handleMessageCommand(bot));
-  bot.onText(/\/(?!start|id\s)(.+)/, handleUnknownCommand(bot));
-}
+bot.onText(/\/start/, handleStartCommand(bot));
+bot.onText(/\/id (.+)/, handleIdCommand(bot));
+bot.on("message", handleMessageCommand(bot));
+bot.onText(/\/(?!start|id\s)(.+)/, handleUnknownCommand(bot));
 
-registerBotEvents();
+bot.setWebHook(WEBHOOK_URL);
 
 process.on("unhandledRejection", (error) => {
   console.error("unhandledRejection", error);
