@@ -49,8 +49,21 @@ app.get("/", (req, res) => {
 app.post(WEBHOOK_URI, async (req, res) => {
   try {
     console.log(req.body);
-    bot.processUpdate(req.body); // Let the bot process the update
-    res.status(200).send("ok"); // Responding with 200 to acknowledge receipt of the update
+
+    // Extract chat id and message from the update
+    const chatId = req.body.message.chat.id;
+    const incomingMessage = req.body.message.text;
+
+    // Process the message (e.g., respond with the same message as an echo bot)
+    const responseMessage = incomingMessage; // Just echoing the same message for simplicity
+
+    // Send the processed message using axios to Telegram API
+    await axios.post(TELEGRAM_API, {
+      chat_id: chatId,
+      text: responseMessage,
+    });
+
+    res.status(200).send("ok");
   } catch (error) {
     console.log(error.message);
   }
