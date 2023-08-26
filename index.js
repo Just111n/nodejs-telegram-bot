@@ -46,10 +46,14 @@ app.get("/", (req, res) => {
 });
 
 // Handling updates from Telegram via the webhook route
-app.post(WEBHOOK_URI, (req, res) => {
-  console.log(req.body);
-  bot.processUpdate(req.body); // Let the bot process the update
-  res.status(200).send("ok"); // Responding with 200 to acknowledge receipt of the update
+app.post(WEBHOOK_URI, async (req, res) => {
+  try {
+    console.log(req.body);
+    bot.processUpdate(req.body); // Let the bot process the update
+    res.status(200).send("ok"); // Responding with 200 to acknowledge receipt of the update
+  } catch (error) {
+    console.log(error.message);
+  }
 });
 
 app.listen(PORT, () => {
