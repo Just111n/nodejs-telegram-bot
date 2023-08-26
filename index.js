@@ -21,7 +21,7 @@ const WEBHOOK_URL = `${process.env.SERVER_URL}${WEBHOOK_URI}`; // Corrected to u
 const app = express();
 app.use(bodyParser.json());
 
-const bot = new TelegramBot(BOT_TOKEN, { webHook: { port: PORT } }); // This configures bot to use webhook
+const bot = new TelegramBot(BOT_TOKEN); // This configures bot to use webhook
 bot.setWebHook(WEBHOOK_URL);
 
 connectDB();
