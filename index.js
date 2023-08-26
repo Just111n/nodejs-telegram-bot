@@ -14,7 +14,6 @@ const { handleInlineQuery } = require("./controller/inlineQueryHandlers");
 
 const BOT_TOKEN = process.env.BOT_TOKEN;
 const PORT = process.env.PORT || 5000;
-const TELEGRAM_API = `https://api.telegram.org/bot${BOT_TOKEN}`;
 const WEBHOOK_URI = `/webhook/${BOT_TOKEN}`;
 const WEBHOOK_URL = `${process.env.SERVER_URL}${WEBHOOK_URI}`;
 
