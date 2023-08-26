@@ -16,26 +16,17 @@ const BOT_TOKEN = process.env.BOT_TOKEN;
 const PORT = process.env.PORT || 5000;
 const TELEGRAM_API = `https://api.telegram.org/bot${BOT_TOKEN}`;
 const WEBHOOK_URI = `/webhook/${BOT_TOKEN}`;
-const WEBHOOK_URL = `${process.env.SERVER_URL}${WEBHOOK_URI}`; // Corrected to use env
+const WEBHOOK_URL = `${process.env.SERVER_URL}${WEBHOOK_URI}`;
 
 const app = express();
 app.use(bodyParser.json());
-
-const bot = new TelegramBot(BOT_TOKEN); // This configures bot to use webhook
 
 try {
   connectDB();
 } catch (err) {
   console.error("Failed to connect to MongoDB:", err.message);
-  process.exit(1); // Exit the application if DB connection fails
+  process.exit(1);
 }
-
-bot.onText(/\/start/, handleStartCommand(bot));
-bot.onText(/\/id (.+)/, handleIdCommand(bot));
-bot.on("message", handleMessageCommand(bot));
-bot.onText(/\/(?!start|id\s)(.+)/, handleUnknownCommand(bot));
-
-bot.setWebHook(WEBHOOK_URL);
 
 process.on("unhandledRejection", (error) => {
   console.error("unhandledRejection", error);
@@ -45,27 +36,36 @@ app.get("/", (req, res) => {
   res.send("hello world");
 });
 
-// Handling updates from Telegram via the webhook route
 app.post(WEBHOOK_URI, async (req, res) => {
   try {
-    console.log(req.body);
+    const update = req.body;
+    console.log(update);
 
-    // Extract chat id and message from the update
-    const chatId = req.body.message.chat.id;
-    const incomingMessage = req.body.message.text;
+    const chatId = update.message.chat.id;
+    const incomingMessage = update.message.text;
 
-    // Process the message (e.g., respond with the same message as an echo bot)
-    const responseMessage = incomingMessage; // Just echoing the same message for simplicity
-
-    // Send the processed message using axios to Telegram API
-    await axios.post(`${TELEGRAM_API}/sendMessage`, {
-      chat_id: chatId,
-      text: responseMessage,
-    });
+    // Handle /start command
+    if (/\/start/.test(incomingMessage)) {
+      await handleStartCommand({ chatId });
+    } 
+    // Handle /id command
+    else if (/\/id (.+)/.test(incomingMessage)) {
+      const match = /\/id (.+)/.exec(incomingMessage);
+      await handleIdCommand({ chatId, match });
+    } 
+    // Handle other unknown commands
+    else if (/\/(?!start|id\s)(.+)/.test(incomingMessage)) {
+      await handleUnknownCommand({ chatId });
+    } 
+    // Handle generic messages
+    else {
+      await handleMessageCommand({ chatId, text: incomingMessage });
+    }
 
     res.status(200).send("ok");
   } catch (error) {
     console.log(error.message);
+    res.status(500).send("Internal Server Error");
   }
 });
 
