@@ -23,7 +23,12 @@ app.use(bodyParser.json());
 
 const bot = new TelegramBot(BOT_TOKEN); // This configures bot to use webhook
 
-connectDB();
+try {
+  connectDB();
+} catch (err) {
+  console.error("Failed to connect to MongoDB:", err.message);
+  process.exit(1); // Exit the application if DB connection fails
+}
 
 bot.onText(/\/start/, handleStartCommand(bot));
 bot.onText(/\/id (.+)/, handleIdCommand(bot));
