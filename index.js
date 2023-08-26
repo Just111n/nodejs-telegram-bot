@@ -58,7 +58,7 @@ app.post(WEBHOOK_URI, async (req, res) => {
     const responseMessage = incomingMessage; // Just echoing the same message for simplicity
 
     // Send the processed message using axios to Telegram API
-    await axios.post(TELEGRAM_API, {
+    await axios.post(`${TELEGRAM_API}/sendMessage`, {
       chat_id: chatId,
       text: responseMessage,
     });
