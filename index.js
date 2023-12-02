@@ -20,12 +20,14 @@ const WEBHOOK_URL = `${process.env.SERVER_URL}${WEBHOOK_URI}`;
 const app = express();
 app.use(bodyParser.json());
 
-try {
-  connectDB();
-} catch (err) {
-  console.error("Failed to connect to MongoDB:", err.message);
-  process.exit(1);
-}
+connectDB();
+
+axios
+  .post(`https://api.telegram.org/bot${BOT_TOKEN}/setWebhook`, {
+    url: `${process.env.SERVER_URL}/webhook/${BOT_TOKEN}`,
+  })
+  .then((response) => console.log(response.data))
+  .catch((error) => console.error(error));
 
 process.on("unhandledRejection", (error) => {
   console.error("unhandledRejection", error);
@@ -35,13 +37,27 @@ app.get("/", (req, res) => {
   res.send("hello world");
 });
 
+app.get("/bot", (req, res) => {
+  axios
+    .get(`https://api.telegram.org/bot${BOT_TOKEN}/getWebhookInfo`)
+    .then((response) => {
+      // Send the response data back to the client
+      res.json(response.data);
+    })
+    .catch((error) => {
+      // Send error response back to the client
+      res.status(500).json({ message: error.message });
+    });
+});
+
 app.post(WEBHOOK_URI, async (req, res) => {
   try {
     const update = req.body;
-    console.log("update:", update);
 
     const chatId = update.message.chat.id;
     const incomingMessage = update.message.text;
+
+    console.log("ChatId:", chatId, "Incoming Message:", incomingMessage);
 
     // Handle /start command
     if (/\/start/.test(incomingMessage)) {
@@ -71,20 +87,4 @@ app.post(WEBHOOK_URI, async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   console.log(`Bot is running with webhook at: ${WEBHOOK_URL}`);
-});
-
-const CHAT_ID = 'YOUR_CHAT_ID'; // Replace with your chat ID
-const text = 'Hello from Axios!';
-
-const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-
-axios.post(url, {
-  chat_id: CHAT_ID,
-  text: text
-})
-.then(response => {
-  console.log('Message sent', response.data);
-})
-.catch(error => {
-  console.error('Error:', error);
 });

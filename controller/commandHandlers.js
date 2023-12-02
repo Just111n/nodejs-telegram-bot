@@ -1,15 +1,11 @@
-const axios = require("axios");
 const studentService = require("../services/studentService");
 const {
   isCommandMessage,
   getStudentsMessage,
 } = require("../utils/studentUtils");
 const {sendMessage} = require("../services/sendMessage")
-const TELEGRAM_API = `https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`;
 
 const NO_STUDENTS_MESSAGE = "No students found with that name";
-
-
 
 module.exports.handleStartCommand = async ({ chatId }) => {
   await sendMessage(
