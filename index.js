@@ -13,23 +13,14 @@ const {
 const { handleInlineQuery } = require("./controller/inlineQueryHandlers");
 
 const BOT_TOKEN = process.env.BOT_TOKEN;
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8000;
 const WEBHOOK_URI = `/webhook/${BOT_TOKEN}`;
 const WEBHOOK_URL = `${process.env.SERVER_URL}${WEBHOOK_URI}`;
 
 const app = express();
 app.use(bodyParser.json());
 
-try {
-  connectDB();
-} catch (err) {
-  console.error("Failed to connect to MongoDB:", err.message);
-  process.exit(1);
-}
-
-process.on("unhandledRejection", (error) => {
-  console.error("unhandledRejection", error);
-});
+connectDB();
 
 app.get("/", (req, res) => {
   res.send("hello world");
@@ -38,7 +29,7 @@ app.get("/", (req, res) => {
 app.post(WEBHOOK_URI, async (req, res) => {
   try {
     const update = req.body;
-    console.log(update);
+    console.log("update:", update);
 
     const chatId = update.message.chat.id;
     const incomingMessage = update.message.text;
@@ -46,16 +37,16 @@ app.post(WEBHOOK_URI, async (req, res) => {
     // Handle /start command
     if (/\/start/.test(incomingMessage)) {
       await handleStartCommand({ chatId });
-    } 
+    }
     // Handle /id command
     else if (/\/id (.+)/.test(incomingMessage)) {
       const match = /\/id (.+)/.exec(incomingMessage);
       await handleIdCommand({ chatId, match });
-    } 
+    }
     // Handle other unknown commands
     else if (/\/(?!start|id\s)(.+)/.test(incomingMessage)) {
       await handleUnknownCommand({ chatId });
-    } 
+    }
     // Handle generic messages
     else {
       await handleMessageCommand({ chatId, text: incomingMessage });
@@ -71,4 +62,8 @@ app.post(WEBHOOK_URI, async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   console.log(`Bot is running with webhook at: ${WEBHOOK_URL}`);
+});
+
+process.on("unhandledRejection", (error) => {
+  console.error("unhandledRejection", error);
 });
