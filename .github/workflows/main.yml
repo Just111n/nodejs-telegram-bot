@@ -1,0 +1,51 @@
+name: Node.js CI
+
+# Trigger the workflow on push or pull request events to the main branch
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+# Define the jobs to run
+jobs:
+  build:
+    # Specify the runner environment
+    runs-on: ubuntu-latest
+
+    # Define a strategy to test across multiple Node.js versions
+    strategy:
+      matrix:
+        node-version: [18.x]
+        # Testing across these versions ensures compatibility
+
+    # Define the steps of the job
+    steps:
+      # Checkout the repository code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Set up Node.js environment based on matrix strategy
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          # Enable caching for npm dependencies
+          cache: "npm"
+
+      # Install project dependencies using npm ci, which is faster for CI/CD
+      - name: Install Dependencies
+        run: npm ci
+
+      # Linting step to ensure code quality and style consistency
+      - name: Run Lint Checks
+        run: npm run lint
+        # Ensure a "lint" script is defined in your package.json
+
+      # Run tests to validate code changes
+      - name: Execute Tests
+        run: npm test
+      # Build the application to ensure no compilation errors
+      - name: Build Application
+        run: npm run build
+        # Ensure your package.json has a "build" script for React app
