@@ -3,7 +3,7 @@ const {
   isCommandMessage,
   getStudentsMessage,
 } = require("../utils/studentUtils");
-const {sendMessage} = require("../services/sendMessage")
+const { sendMessage } = require("../services/sendMessage");
 
 const NO_STUDENTS_MESSAGE = "No students found with that name";
 
