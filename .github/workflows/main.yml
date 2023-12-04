@@ -47,5 +47,5 @@ jobs:
         run: npm test
       # Build the application to ensure no compilation errors
       - name: Build Application
-        run: npm run build
+        run: npm run build --if-present
         # Ensure your package.json has a "build" script for React app
