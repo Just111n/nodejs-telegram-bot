@@ -4,10 +4,11 @@ const bodyParser = require("body-parser");
 const connectDB = require("./database");
 const {
   handleStartCommand,
-  handleIdCommand,
   handleMessageCommand,
   handleUnknownCommand,
-} = require("./controller/commandHandlers");
+  handleFeedbackCommand,
+  handleIdCommand,
+} = require("./controller/commandHandlers/commandHandlers");
 const setUpWebhook = require("./webhook");
 const botRouter = require("./api/bot/botRouter");
 const emailRouter = require("./api/email/emailRouter");
@@ -48,8 +49,14 @@ app.post(WEBHOOK_URI, async (req, res) => {
       const match = /\/id (.+)/.exec(incomingMessage);
       await handleIdCommand({ chatId, match });
     }
+    // Handle /feedback command
+    else if (/\/feedback (.+)/.test(incomingMessage)) {
+      const match = /\/feedback (.+)/.exec(incomingMessage);
+      await handleFeedbackCommand({ chatId, match });
+    }
+
     // Handle other unknown commands
-    else if (/\/(?!start|id\s)(.+)/.test(incomingMessage)) {
+    else if (/\/(?!start|id|feedback\s)(.+)/.test(incomingMessage)) {
       await handleUnknownCommand({ chatId });
     }
     // Handle generic messages
