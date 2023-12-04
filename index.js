@@ -1,16 +1,16 @@
 require("dotenv").config();
-const TelegramBot = require("node-telegram-bot-api");
 const express = require("express");
 const bodyParser = require("body-parser");
-const axios = require("axios");
-const connectDB = require("./db");
+const connectDB = require("./database");
 const {
   handleStartCommand,
   handleIdCommand,
   handleMessageCommand,
   handleUnknownCommand,
 } = require("./controller/commandHandlers");
-const { handleInlineQuery } = require("./controller/inlineQueryHandlers");
+const setUpWebhook = require("./webhook");
+const botRouter = require("./api/bot/botRouter");
+const emailRouter = require("./api/email/emailRouter");
 
 const BOT_TOKEN = process.env.BOT_TOKEN;
 const PORT = process.env.PORT || 8000;
@@ -21,34 +21,14 @@ const app = express();
 app.use(bodyParser.json());
 
 connectDB();
-
-axios
-  .post(`https://api.telegram.org/bot${BOT_TOKEN}/setWebhook`, {
-    url: `${process.env.SERVER_URL}/webhook/${BOT_TOKEN}`,
-  })
-  .then((response) => console.log(response.data))
-  .catch((error) => console.error(error));
-
-process.on("unhandledRejection", (error) => {
-  console.error("unhandledRejection", error);
-});
+setUpWebhook();
 
 app.get("/", (req, res) => {
-  res.send("hello world");
+  res.send("Server is running...");
 });
 
-app.get("/bot", (req, res) => {
-  axios
-    .get(`https://api.telegram.org/bot${BOT_TOKEN}/getWebhookInfo`)
-    .then((response) => {
-      // Send the response data back to the client
-      res.json(response.data);
-    })
-    .catch((error) => {
-      // Send error response back to the client
-      res.status(500).json({ message: error.message });
-    });
-});
+app.use("/api", botRouter);
+app.use("/api", emailRouter);
 
 app.post(WEBHOOK_URI, async (req, res) => {
   try {
@@ -87,4 +67,8 @@ app.post(WEBHOOK_URI, async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   console.log(`Bot is running with webhook at: ${WEBHOOK_URL}`);
+});
+
+process.on("unhandledRejection", (error) => {
+  console.error("unhandledRejection", error);
 });

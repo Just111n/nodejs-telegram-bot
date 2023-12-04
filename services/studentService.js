@@ -12,9 +12,8 @@ exports.getOutputFromStudentId = async (studentId) => {
     } else {
       return "Student not Found";
     }
-  } catch (err) {
+  } catch (error) {
     console.error("Error fetching students by student id:", error);
-    throw error;
   }
 };
 
@@ -29,6 +28,5 @@ module.exports.getStudentsByName = async (inputName) => {
     return students;
   } catch (error) {
     console.error("Error fetching students by name:", error);
-    throw error;
   }
 };

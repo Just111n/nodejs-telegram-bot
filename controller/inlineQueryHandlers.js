@@ -1,10 +1,7 @@
 const studentService = require("../services/studentService");
-const {
-  isCommandMessage,
-  getStudentsMessage,
-} = require("../utils/studentUtils");
+const { getStudentsMessage } = require("../utils/studentUtils");
 
-// Uncomment and import any required dependencies
+const NO_STUDENTS_MESSAGE = "No students found with that name";
 
 const handleInlineQuery = (bot) => async (query) => {
   const name = query.query.slice(5);
