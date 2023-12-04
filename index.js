@@ -1,4 +1,5 @@
 require("dotenv").config();
+const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 const connectDB = require("./database");
@@ -24,8 +25,10 @@ app.use(bodyParser.json());
 connectDB();
 setUpWebhook();
 
+
 app.get("/", (req, res) => {
-  res.send("Server is running...");
+  // Send the index.html file
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 app.use("/api", botRouter);

@@ -3,6 +3,6 @@ const { sendMessage } = require("../../../services/sendMessage");
 module.exports.handleStartCommand = async ({ chatId }) => {
   await sendMessage(
     chatId,
-    "I'm a bot, please talk to me!\nType a name to find their student id"
+    "🌟 Hey there! I'm super excited to help you! 🚀 Just type in a name, and I'll quickly find their student ID for you. Let's make this fun and easy! 😊🌈 🌟"
   );
 };
