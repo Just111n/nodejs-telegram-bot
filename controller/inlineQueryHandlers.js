@@ -1,5 +1,7 @@
 const studentService = require("../services/studentService");
-const { getStudentsMessage } = require("../utils/studentUtils");
+const {
+  getStudentsMessage,
+} = require("../utils/student/getStudentsMessage/getStudentsMessage");
 
 const NO_STUDENTS_MESSAGE = "No students found with that name";
 
