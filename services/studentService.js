@@ -1,5 +1,8 @@
 const Student = require("../models/student");
-const { getOutputFromStudent } = require("../utils/studentUtils");
+const {
+  getOutputFromStudent,
+} = require("../utils/student/getOutputFromStudent/getOutputFromStudent");
+// const { getOutputFromStudent } = require("../utils/studentUtils");
 
 exports.getOutputFromStudentId = async (studentId) => {
   try {
