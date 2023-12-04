@@ -1,54 +1,37 @@
 const COMMAND_PREFIX = "/";
 
-exports.studentDdFromText = function (text) {
-  const textLs = text.split("\n");
-  const result = {};
-
-  for (let item of textLs) {
-    result[item.substring(3, 10)] = item.substring(11);
-  }
-  return result;
-};
-
-exports.textFromStudentDd = function (studentDd) {
-  let result = "";
-  let counter = 0;
-
-  for (let [id, name] of Object.entries(studentDd)) {
-    counter++;
-    result += `${counter}. ${id} ${name}\n`;
-  }
-
-  if (result && counter === 1) {
-    return `${id} ${name}`;
-  } else if (result) {
-    return result.slice(0, -1); // Removing the trailing newline
-  } else {
-    return "Something is not right....";
-  }
-};
-
-exports.getOutputFromStudent = function (student) {
-  const { studentId, name } = student;
-
-  const result = `${studentId} ${name}`;
-  for (let key in student) {
-  }
-  return result;
-};
-
-exports.getStudentsMessage = (students) => {
-  return students.map(exports.getOutputFromStudent).join("\n");
-};
-
-exports.isCommandMessage = (text) => {
-  return text.startsWith(COMMAND_PREFIX);
-};
-
-// Check if this module is the main module being executed
-if (require.main === module) {
-  // Example usage:
-  const text = `1. 1234567 John Doe\n2. 2345678 Jane Smith`;
-  console.log(exports.studentDdFromText(text));
-  console.log(exports.textFromStudentDd(exports.studentDdFromText(text)));
+/**
+ * Formats the student data into a string.
+ * @param {Object} student - The student object.
+ * @param {string} student.studentId - The student's ID.
+ * @param {string} student.name - The student's name.
+ * @returns {string} - Formatted string of student data.
+ */
+function getOutputFromStudent({ studentId, name }) {
+  return `${studentId} ${name}`;
 }
+
+/**
+ * Generates a message string from a list of students.
+ * @param {Array} students - Array of student objects.
+ * @returns {string} - A string with each student's information on a new line.
+ */
+function getStudentsMessage(students) {
+  return students.map(getOutputFromStudent).join("\n");
+}
+
+/**
+ * Checks if a given text is a command.
+ * @param {string} text - The text to check.
+ * @returns {boolean} - True if the text is a command, false otherwise.
+ */
+function isCommandMessage(text) {
+  return text.startsWith(COMMAND_PREFIX);
+}
+
+// Export the functions
+module.exports = {
+  getOutputFromStudent,
+  getStudentsMessage,
+  isCommandMessage,
+};
