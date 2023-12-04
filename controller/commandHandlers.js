@@ -1,9 +1,11 @@
 const studentService = require("../services/studentService");
+const { sendMessage } = require("../services/sendMessage");
 const {
   isCommandMessage,
+} = require("../utils/common/isCommandMessage/isCommandMessage");
+const {
   getStudentsMessage,
-} = require("../utils/studentUtils");
-const { sendMessage } = require("../services/sendMessage");
+} = require("../utils/student/getStudentsMessage/getStudentsMessage");
 
 const NO_STUDENTS_MESSAGE = "No students found with that name";
 

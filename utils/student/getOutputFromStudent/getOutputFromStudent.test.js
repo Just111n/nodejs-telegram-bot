@@ -1,4 +1,4 @@
-const { getOutputFromStudent } = require("../studentUtils");
+const { getOutputFromStudent } = require("./getOutputFromStudent");
 
 describe("getOutputFromStudent", () => {
   test("should return a string combining studentId and name", () => {
@@ -32,6 +32,10 @@ describe("getOutputFromStudent", () => {
     expect(result).toBe("123 null");
   });
 
+  test("should handle empty object is passed", () => {
+    const result = getOutputFromStudent({});
+    expect(result).toBe("undefined undefined");
+  });
   test("should throw an error if no argument is passed", () => {
     expect(() => {
       getOutputFromStudent();
