@@ -9,6 +9,7 @@ const {
   handleUnknownCommand,
   handleFeedbackCommand,
   handleIdCommand,
+  handleHelpCommand,
 } = require("./controller/commandHandlers/commandHandlers");
 const setUpWebhook = require("./webhook");
 const botRouter = require("./api/bot/botRouter");
@@ -24,7 +25,6 @@ app.use(bodyParser.json());
 
 connectDB();
 setUpWebhook();
-
 
 app.get("/", (req, res) => {
   // Send the index.html file
@@ -44,24 +44,29 @@ app.post(WEBHOOK_URI, async (req, res) => {
     console.log("ChatId:", chatId, "Incoming Message:", incomingMessage);
 
     // Handle /start command
-    if (/\/start/.test(incomingMessage)) {
+    if (/^\/start$/.test(incomingMessage)) {
       await handleStartCommand({ chatId });
     }
     // Handle /id command
-    else if (/\/id (.+)/.test(incomingMessage)) {
-      const match = /\/id (.+)/.exec(incomingMessage);
+    else if (/^\/id (.+)/.test(incomingMessage)) {
+      const match = /^\/id (.+)/.exec(incomingMessage);
       await handleIdCommand({ chatId, match });
     }
     // Handle /feedback command
-    else if (/\/feedback (.+)/.test(incomingMessage)) {
-      const match = /\/feedback (.+)/.exec(incomingMessage);
+    else if (/^\/feedback (.+)/.test(incomingMessage)) {
+      const match = /^\/feedback (.+)/.exec(incomingMessage);
       await handleFeedbackCommand({ chatId, match });
+    }
+    // Handle /help command
+    else if (/^\/help$/.test(incomingMessage)) {
+      await handleHelpCommand({ chatId });
     }
 
     // Handle other unknown commands
-    else if (/\/(?!start|id|feedback\s)(.+)/.test(incomingMessage)) {
+    else if (/^\/(?!start|id|feedback|help)(.+)/.test(incomingMessage)) {
       await handleUnknownCommand({ chatId });
     }
+
     // Handle generic messages
     else {
       await handleMessageCommand({ chatId, text: incomingMessage });

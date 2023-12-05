@@ -9,6 +9,7 @@ const {
 const { handleFeedbackCommand } = require("./feedback/feedback");
 const { handleStartCommand } = require("./start/start");
 const { handleIdCommand } = require("./id/id");
+const { handleHelpCommand } = require("./help/help");
 
 const NO_STUDENTS_MESSAGE = "No students found with that name";
 
@@ -35,5 +36,6 @@ module.exports = {
   handleIdCommand,
   handleFeedbackCommand,
   handleMessageCommand,
+  handleHelpCommand,
   handleUnknownCommand,
 };
