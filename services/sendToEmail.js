@@ -1,12 +1,10 @@
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
 
-const CLIENT_ID =
-  "278614671497-1588ccfcgab63bgr3q4siio5c725kog2.apps.googleusercontent.com";
-const CLIENT_SECRET = "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";
+const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = "https://developers.google.com/oauthplayground";
-const REFRESH_TOKEN =
-  "1//04wjFnZyKRDD2CgYIARAAGAQSNwF-L9Irf1zpeAwPfdYECU4RuN1twlnJjpoijUtJub5GEhnzkDsW-A90sGXMcOCzzt75XqkuupQ";
+const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
 
 const oAuth2Client = new google.auth.OAuth2(
   CLIENT_ID,
@@ -34,15 +32,16 @@ async function sendToEmail(feedback, recipientEmail) {
     });
 
     const mailOptions = {
-      from: process.env.GMAIL,
+      from: `STUDENT NODEJS TELEGRAMBOT🤖<${process.env.GMAIL}>`,
       to: recipientEmail,
-      subject: "Feedback from Telegram Bot",
+      subject: "Feedback from Student Telegram Bot",
       text: feedback,
     };
     let info = await transport.sendMail(mailOptions);
     console.log("Email sent: " + info.response);
   } catch (error) {
     console.error("Error sending email: " + error.message);
+    throw error;
   }
 }
 
