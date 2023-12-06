@@ -2,7 +2,6 @@ const Student = require("../models/student");
 const {
   getOutputFromStudent,
 } = require("../utils/student/getOutputFromStudent/getOutputFromStudent");
-// const { getOutputFromStudent } = require("../utils/studentUtils");
 
 exports.getOutputFromStudentId = async (studentId) => {
   try {
@@ -19,8 +18,6 @@ exports.getOutputFromStudentId = async (studentId) => {
     console.error("Error fetching students by student id:", error);
   }
 };
-
-// Assuming you have a Student model defined somewhere like this:
 
 module.exports.getStudentsByName = async (inputName) => {
   try {

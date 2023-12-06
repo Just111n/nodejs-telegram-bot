@@ -1,16 +1,10 @@
-const { getBotInfo } = require("../../services/getBotInfo");
 const express = require("express");
+const webhook = require("./routes/webhook");
+const bot = require("./routes/info");
 const botRouter = express.Router();
 
-//route to read our cookies after loggin in
-botRouter.route("/bot").get(async (req, res) => {
-  try {
-    const data = await getBotInfo();
-    return res.json(data);
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Internal Server Error");
-  }
-});
+botRouter.route("/webhook").get(webhook);
+
+botRouter.route("/info").get(bot);
 
 module.exports = botRouter;
