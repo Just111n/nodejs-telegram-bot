@@ -31,7 +31,7 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-app.use("/api", botRouter);
+app.use("/api/bot", botRouter);
 app.use("/api", emailRouter);
 
 app.post(WEBHOOK_URI, async (req, res) => {
