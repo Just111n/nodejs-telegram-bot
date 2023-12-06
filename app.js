@@ -2,7 +2,7 @@ require("dotenv").config();
 const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
-const connectDB = require("./database");
+const connectDB = require("./config/database");
 const {
   handleStartCommand,
   handleMessageCommand,
@@ -11,9 +11,10 @@ const {
   handleIdCommand,
   handleHelpCommand,
 } = require("./controller/commandHandlers/commandHandlers");
-const setUpWebhook = require("./webhook");
+const setUpWebhook = require("./config/webhook");
 const botRouter = require("./api/bot/botRouter");
 const emailRouter = require("./api/email/emailRouter");
+const { createTransport } = require("./config/emailTransport");
 
 const BOT_TOKEN = process.env.BOT_TOKEN;
 const PORT = process.env.PORT || 8000;
@@ -25,6 +26,7 @@ app.use(bodyParser.json());
 
 connectDB();
 setUpWebhook();
+createTransport();
 
 app.get("/", (req, res) => {
   // Send the index.html file
