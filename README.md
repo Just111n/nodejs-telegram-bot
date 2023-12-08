@@ -3,12 +3,14 @@
 Helps you to search from a database and read it remotely
 
 ## Docker Example
+
 Building the Docker Image
 Build the Docker image using the following command:
 
 ```bash
 docker build -t telegram-bot .
 ```
+
 This command builds a Docker image named telegram-bot based on the instructions in your Dockerfile.
 
 Running the Bot in a Docker Container
