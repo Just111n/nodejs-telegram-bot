@@ -3,23 +3,14 @@ const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 const connectDB = require("./config/database");
-const {
-  handleStartCommand,
-  handleMessageCommand,
-  handleUnknownCommand,
-  handleFeedbackCommand,
-  handleIdCommand,
-  handleHelpCommand,
-} = require("./controller/commandHandlers/commandHandlers");
+require("./controllers/commandHandlers/commandHandlers");
 const setUpWebhook = require("./config/webhook");
 const botRouter = require("./api/bot/botRouter");
 const emailRouter = require("./api/email/emailRouter");
 const { createTransport } = require("./config/emailTransport");
+const { SETUP_WEBHOOK_URL, DEFAULT_URI } = require("./routes/route.constants");
 
-const BOT_TOKEN = process.env.BOT_TOKEN;
 const PORT = process.env.PORT || 8000;
-const WEBHOOK_URI = `/webhook/${BOT_TOKEN}`;
-const WEBHOOK_URL = `${process.env.SERVER_URL}${WEBHOOK_URI}`;
 
 const app = express();
 app.use(bodyParser.json());
@@ -28,62 +19,16 @@ connectDB();
 setUpWebhook();
 createTransport();
 
-app.get("/", (req, res) => {
-  // Send the index.html file
+app.get(DEFAULT_URI, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-app.use("/api/bot", botRouter);
-app.use("/api", emailRouter);
-
-app.post(WEBHOOK_URI, async (req, res) => {
-  try {
-    const update = req.body;
-
-    const chatId = update.message.chat.id;
-    const incomingMessage = update.message.text;
-
-    console.log("ChatId:", chatId, "Incoming Message:", incomingMessage);
-
-    // Handle /start command
-    if (/^\/start$/.test(incomingMessage)) {
-      await handleStartCommand({ chatId });
-    }
-    // Handle /id command
-    else if (/^\/id (.+)/.test(incomingMessage)) {
-      const match = /^\/id (.+)/.exec(incomingMessage);
-      await handleIdCommand({ chatId, match });
-    }
-    // Handle /feedback command
-    else if (/^\/feedback (.+)/.test(incomingMessage)) {
-      const match = /^\/feedback (.+)/.exec(incomingMessage);
-      await handleFeedbackCommand({ chatId, match });
-    }
-    // Handle /help command
-    else if (/^\/help$/.test(incomingMessage)) {
-      await handleHelpCommand({ chatId });
-    }
-
-    // Handle other unknown commands
-    else if (/^\/(?!start|id|feedback|help)(.+)/.test(incomingMessage)) {
-      await handleUnknownCommand({ chatId });
-    }
-
-    // Handle generic messages
-    else {
-      await handleMessageCommand({ chatId, text: incomingMessage });
-    }
-
-    res.status(200).send("ok");
-  } catch (error) {
-    console.log(error.message);
-    res.status(500).send("Internal Server Error");
-  }
-});
+app.use(botRouter);
+app.use(emailRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  console.log(`Bot is running with webhook at: ${WEBHOOK_URL}`);
+  console.log(`Bot is running with webhook at: ${SETUP_WEBHOOK_URL}`);
 });
 
 process.on("unhandledRejection", (error) => {

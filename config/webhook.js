@@ -1,11 +1,12 @@
 const axios = require("axios");
+const { SETUP_WEBHOOK_URL } = require("../routes/route.constants");
 
 async function setUpWebhook() {
   try {
     await axios.post(
       `https://api.telegram.org/bot${process.env.BOT_TOKEN}/setWebhook`,
       {
-        url: `${process.env.SERVER_URL}/webhook/${process.env.BOT_TOKEN}`,
+        url: SETUP_WEBHOOK_URL,
       }
     );
     console.log("Webhook Connected...");
