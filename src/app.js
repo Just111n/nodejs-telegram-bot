@@ -8,7 +8,7 @@ const setUpWebhook = require("./config/webhook");
 const botRouter = require("./api/bot/botRouter");
 const emailRouter = require("./api/email/emailRouter");
 const { createTransport } = require("./config/emailTransport");
-const { SETUP_WEBHOOK_URL, DEFAULT_URI } = require("./routes/route.constants");
+const { SETUP_WEBHOOK_URL, DEFAULT_URI } = require("./api/route.constants");
 
 const PORT = process.env.PORT || 8000;
 
@@ -20,7 +20,7 @@ setUpWebhook();
 createTransport();
 
 app.get(DEFAULT_URI, (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(path.join(__dirname, "..", "public", "index.html"));
 });
 
 app.use(botRouter);

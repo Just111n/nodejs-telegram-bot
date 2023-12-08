@@ -9,6 +9,7 @@ const {
 
 async function processWebhookUpdate(req, res) {
   try {
+    console.log(req);
     const update = req.body;
     const chatId = update.message.chat.id;
     const incomingMessage = update.message.text;

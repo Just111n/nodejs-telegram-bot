@@ -1,5 +1,5 @@
 const express = require("express");
-const { EMAIL_URI } = require("../../routes/route.constants");
+const { EMAIL_URI } = require("../route.constants");
 const emailRouter = express.Router();
 
 //route to read our cookies after loggin in

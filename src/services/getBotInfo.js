@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { TELEGRAM_API } = require("./constants");
+const { TELEGRAM_API } = require("./service.constants");
 
 module.exports.getBotInfo = async () => {
   try {

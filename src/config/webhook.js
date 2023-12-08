@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { SETUP_WEBHOOK_URL } = require("../routes/route.constants");
+const { SETUP_WEBHOOK_URL } = require("../api/route.constants");
 
 async function setUpWebhook() {
   try {
