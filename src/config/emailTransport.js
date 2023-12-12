@@ -32,6 +32,7 @@ async function createTransport() {
     console.log("Email API Connected...");
   } catch (error) {
     console.error("Error creating email transport: " + error.message);
+    transport = null;
   }
 }
 
