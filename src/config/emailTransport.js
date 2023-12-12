@@ -32,16 +32,14 @@ async function createTransport() {
     console.log("Email API Connected...");
   } catch (error) {
     console.error("Error creating email transport: " + error.message);
-    transport = null;
   }
 }
 
-async function getTransport() {
+function getTransport() {
   if (!transport) {
-    await createTransport(); // Initialize transport if it's not already created
+    throw new Error("Transport not initialized. Call createTransport first.");
   }
   return transport;
 }
-
 
 module.exports = { createTransport, getTransport };
