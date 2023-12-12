@@ -35,11 +35,12 @@ async function createTransport() {
   }
 }
 
-function getTransport() {
+async function getTransport() {
   if (!transport) {
-    throw new Error("Transport not initialized. Call createTransport first.");
+    await createTransport(); // Initialize transport if it's not already created
   }
   return transport;
 }
+
 
 module.exports = { createTransport, getTransport };
