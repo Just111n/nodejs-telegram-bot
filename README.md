@@ -21,3 +21,7 @@ docker run -d -p 8000:8000 telegram-bot
 ```
 
 This command starts the bot in a detached container, mapping port 8000 of the container to port 8000 on your host machine.
+
+## Environment Configuration
+Create a `.env` file for environment variables by using the provided `.env.example` template. Customize it with your own settings to configure the bot accordingly.
+
