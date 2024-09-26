@@ -2,6 +2,9 @@
 
 Helps you to search from a database and read it remotely
 
+## Deployment
+This Telegram bot was deployed for free using webhooks and Express.js, making it efficient and cost-effective to run without the need for a dedicated polling server.
+
 ## Docker Example
 
 Building the Docker Image
