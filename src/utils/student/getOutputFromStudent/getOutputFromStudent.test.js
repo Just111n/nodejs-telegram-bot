@@ -4,7 +4,6 @@ describe("getOutputFromStudent", () => {
   test("should return a string combining studentId and name", () => {
     const student = { studentId: "123", name: "John Doe" };
     const result = getOutputFromStudent(student);
-    console.log(result);
     expect(result).toBe("123 John Doe");
   });
 
