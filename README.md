@@ -49,6 +49,7 @@ graph TD
 
 
 ## How Telegram Bot Processes User Messages and Sends Automated Responses via Webhooks
+
 ```mermaid
 sequenceDiagram
     participant User as Telegram User
@@ -62,6 +63,23 @@ sequenceDiagram
     TelegramAPI-->>Bot: Processes the message
     Bot-->>User: Sends response message
 
+```
+
+## How Telegram Bot Processes User Feedback Command and sends feedback to email address
+
+```mermaid
+sequenceDiagram
+    participant User as Telegram User
+    participant TelegramAPI as Telegram API
+    participant Express as Node.js Express Server
+    participant EmailService as Email Service (e.g., Nodemailer)
+    
+    User->>TelegramAPI: Sends command (e.g., "/feedback I love your bot!")
+    TelegramAPI->>Express: Sends POST request via webhook with message data
+    Express->>EmailService: Sends email request with recipient and content
+    EmailService-->>Express: Confirms email sent successfully
+    Express->>TelegramAPI: Sends confirmation message via POST request
+    TelegramAPI-->>User: Notifies user that the email was sent successfully
 ```
 
 ## Start Developing Locally
